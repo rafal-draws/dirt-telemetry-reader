@@ -17,19 +17,67 @@ def main():
         values = extract_values(data)
 
         print("____________________")
+
+        #lap
         print(f"Time = {values[0]}")
         print(f"CurLap = {values[1]}")
         print(f"distancedrivenCurLap = {values[2]}")
         print(f"distanceDrivenOverall = {values[3]}")
+
+
+        #geo
         print(f"X = {values[4]}")
         print(f"Y = {values[5]}")
         print(f"Z = {values[6]}")
-        print(f"Speed<m/s> = {values[7]}")
-        print(f"RPM<rpm/10> = {values[37]}")
+
+        print(f"Speed<m/s> = {values[7] // 1000}")
+
+
+        # velocity
         print(f"velocityX = {values[8]}")
         print(f"velocityY = {values[9]}")
+        print(f"velocityZ = {values[10]}")
+
+        # roll vector
+        print(f"rollX = {values[11]}")
+        print(f"rollY = {values[12]}")
+        print(f"rollZ = {values[13]}")
+
+        # pitch vector
+        print(f"pitchX = {values[14]}")
+        print(f"pitchY = {values[15]}")
+        print(f"pitchZ = {values[16]}")
+
+        # suspension position
+        print(f"RLsuspensionPosition = {values[17]}")
+        print(f"RRsuspensionPosition = {values[18]}")
+        print(f"FLsuspensionPosition = {values[19]}")
+        print(f"FRsuspensionPosition = {values[20]}")
+
+        # suspension velocity
+        print(f"RLsuspensionVelocity = {values[21]}")
+        print(f"RRsuspensionVelocity = {values[22]}")
+        print(f"FLsuspensionVelocity = {values[23]}")
+        print(f"FRsuspensionVelocity = {values[24]}")
+
+        # wheel velocity
+        print(f"RLwheelVelocity = {values[25]}")
+        print(f"RRwheelVelocity = {values[26]}")
+        print(f"FLwheelVelocity = {values[27]}")
+        print(f"FRwheelVelocity = {values[28]}")
+
+
+        # Steering
+        print(f"Throttle = {values[29]}")
+        print(f"Steer = {values[30]}")
+        print(f"Brake = {values[31]}")
+        print(f"Clutch = {values[32]}")
+        print(f"Gear = {values[33]}")
+
+        # G Force
         print(f"G-Force Lateral = {values[34]}")
         print(f"G-Force Longitudinal= {values[35]}")
+        print(f"RPM = {values[37] * 10}")
 
 
 
