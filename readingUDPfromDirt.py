@@ -2,6 +2,8 @@ import socket
 import time
 import struct
 
+from sendTCP import send_tcp_message, connect_to_client
+
 def main():
     UDP_IP = "127.0.0.1"
     UDP_PORT = 20777
@@ -10,6 +12,8 @@ def main():
                        socket.SOCK_DGRAM)
 
     sock.bind((UDP_IP, UDP_PORT))
+
+    client_socket = connect_to_client()
 
     while True:
         data, addr = sock.recvfrom(4096)
@@ -30,7 +34,7 @@ def main():
         print(f"Y = {values[5]}")
         print(f"Z = {values[6]}")
 
-        print(f"Speed<m/s> = {values[7] // 1000}")
+        print(f"Speed<km/h> = {values[7] * 3600 / 1000}")
 
 
         # velocity
@@ -79,6 +83,10 @@ def main():
         print(f"G-Force Longitudinal= {values[35]}")
         print(f"RPM = {values[37] * 10}")
 
+
+        # ENABLE HOST
+        send_tcp_message(client_socket, f"Speed<km/h> = {values[7] * 3600 / 1000}")
+    
 
 
 def extract_values(data):
