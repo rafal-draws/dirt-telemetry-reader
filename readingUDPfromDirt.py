@@ -96,5 +96,5 @@ def extract_values(data):
 
     return values
 
-while __name__ == "__main__":
+if __name__ == "__main__":
     main()
