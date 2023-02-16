@@ -1,22 +1,24 @@
 import socket
 
-def connect_to_client():
-    receiver_ip = "192.168.1.17"
-    receiver_port = 12345
 
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((receiver_ip, receiver_port))
+class TCPSender:
+    def __init__(self, receiver_ip: str, receiver_port: int):
+        self.receiver_ip = receiver_ip
+        self.receiver_port = receiver_port
 
-    return client_socket
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect((self.receiver_ip, self.receiver_port))
+    def close_connection_with_client(self):
+        self.client_socket.close()
 
-
-def send_tcp_message(client_socket, message):
-    
-    client_socket.sendall(message.encode("utf-8"))
+    def send_tcp_message(self, message):
+        socket = self.client_socket
+        socket.sendall(message.encode("utf-8"))
 
 
 def main():
-    send_tcp_message("elo")
+    sender = TCPSender("192.168.1.17", 12345)
+    sender.send_tcp_message("elo")
 
 if __name__ == "__main__":
     main()

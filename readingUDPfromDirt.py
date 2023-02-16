@@ -2,7 +2,7 @@ import socket
 import time
 import struct
 
-from sendTCP import send_tcp_message, connect_to_client
+from sendTCP import TCPSender
 
 def main():
     UDP_IP = "127.0.0.1"
@@ -13,9 +13,11 @@ def main():
 
     sock.bind((UDP_IP, UDP_PORT))
 
-    client_socket = connect_to_client()
+    
 
     while True:
+        sender = TCPSender("192.168.1.17", 12345)
+        
         data, addr = sock.recvfrom(4096)
 
         values = extract_values(data)
@@ -84,9 +86,9 @@ def main():
         print(f"RPM = {values[37] * 10}")
 
 
-        # ENABLE HOST
-        send_tcp_message(client_socket, f"Speed<km/h> = {values[7] * 3600 / 1000}")
-    
+        # Send message and close connection
+        sender.send_tcp_message(f"Speed<km/h> = {values[7] * 3600 / 1000}")
+        sender.close_connection_with_client()
 
 
 def extract_values(data):
