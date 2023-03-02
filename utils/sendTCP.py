@@ -14,11 +14,3 @@ class TCPSender:
     def send_tcp_message(self, message):
         socket = self.client_socket
         socket.sendall(message.encode("utf-8"))
-
-
-def main():
-    sender = TCPSender("192.168.1.17", 12345)
-    sender.send_tcp_message("elo")
-
-if __name__ == "__main__":
-    main()
