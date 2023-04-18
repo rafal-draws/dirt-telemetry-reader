@@ -1,5 +1,6 @@
 import struct
 import socket
+import json
 
 from utils import sendTCP
 
@@ -105,74 +106,89 @@ def console():
         # sender.send_tcp_message(f"Speed<km/h> = {values[7] * 3600 / 1000}")
         # sender.close_connection_with_client()
 
-def json(output_path):
+def data_json(output_path):
 
-    while True:
-        data, addr = socket_port.recvfrom(4096)
-        values = extract_values(data)
+    try:
+        with open(output_path, "x") as fout:
+            fout.write("[")
+            try:
+                while True:
+                    data, addr = socket_port.recvfrom(4096)
+                    values = extract_values(data)
 
-        tickOutput = {}
-        
-        #lap
-        tickOutput["time"] = values[0]
-        tickOutput["currentlap"] = values[1]
-        tickOutput["lapdistancedriven"] = values[2]
-        tickOutput["distancedrivenoverall"] = values[3]
+                    tickOutput = {}
+                    
+                    #lap
+                    tickOutput["time"] = values[0]
+                    tickOutput["currentlap"] = values[1]
+                    tickOutput["lapdistancedriven"] = values[2]
+                    tickOutput["distancedrivenoverall"] = values[3]
 
-        #geo
-        tickOutput['X'] = values[4]
-        tickOutput['Y'] = values[5]
-        tickOutput['Z'] = values[6]
+                    #geo
+                    tickOutput['X'] = values[4]
+                    tickOutput['Y'] = values[5]
+                    tickOutput['Z'] = values[6]
 
-        tickOutput["speed<km/h>"] = values[7] * 3600 / 1000
+                    tickOutput["speed<km/h>"] = values[7] * 3600 / 1000
 
-        # velocity
-        tickOutput["velocityX"] = values[8]
-        tickOutput["velocityY"] = values[9]
-        tickOutput["velocityZ"] = values[10]
+                    # velocity
+                    tickOutput["velocityX"] = values[8]
+                    tickOutput["velocityY"] = values[9]
+                    tickOutput["velocityZ"] = values[10]
 
-        # roll vector
-        tickOutput["rollX"] = values[11]
-        tickOutput["rollY"] = values[12]
-        tickOutput["rollZ"] = values[13]
+                    # roll vector
+                    tickOutput["rollX"] = values[11]
+                    tickOutput["rollY"] = values[12]
+                    tickOutput["rollZ"] = values[13]
 
-        # pitch vector
-        tickOutput["pitchX"] = values[14]
-        tickOutput["pitchY"] = values[15]
-        tickOutput["pitchZ"] = values[16]
+                    # pitch vector
+                    tickOutput["pitchX"] = values[14]
+                    tickOutput["pitchY"] = values[15]
+                    tickOutput["pitchZ"] = values[16]
 
-        # suspension position
-        tickOutput["RLsuspensionPosition"] = values[17]
-        tickOutput["RRsuspensionPosition"] = values[18]
-        tickOutput["FLsuspensionPosition"] = values[19]
-        tickOutput["FRsuspensionPosition"] = values[20]
+                    # suspension position
+                    tickOutput["RLsuspensionPosition"] = values[17]
+                    tickOutput["RRsuspensionPosition"] = values[18]
+                    tickOutput["FLsuspensionPosition"] = values[19]
+                    tickOutput["FRsuspensionPosition"] = values[20]
 
-        # suspension velocity
-        tickOutput["RLsuspensionVelocity"] = values[21]
-        tickOutput["RRsuspensionVelocity"] = values[22]
-        tickOutput["FLsuspensionVelocity"] = values[23]
-        tickOutput["FRsuspensionVelocity"] = values[24]
+                    # suspension velocity
+                    tickOutput["RLsuspensionVelocity"] = values[21]
+                    tickOutput["RRsuspensionVelocity"] = values[22]
+                    tickOutput["FLsuspensionVelocity"] = values[23]
+                    tickOutput["FRsuspensionVelocity"] = values[24]
 
-        # wheel velocity
-        tickOutput["RLwheelVelocity"] = values[25]
-        tickOutput["RRwheelVelocity"] = values[26]
-        tickOutput["FLwheelVelocity"] = values[27]
-        tickOutput["FRwheelVelocity"] = values[28]
+                    # wheel velocity
+                    tickOutput["RLwheelVelocity"] = values[25]
+                    tickOutput["RRwheelVelocity"] = values[26]
+                    tickOutput["FLwheelVelocity"] = values[27]
+                    tickOutput["FRwheelVelocity"] = values[28]
 
 
-        # Steering
-        tickOutput["Throttle"] = values[29]
-        tickOutput["Steer"] = values[30]
-        tickOutput["Brake"] = values[31]
-        tickOutput["Clutch"] = values[32]
-        tickOutput["Gear"] = values[33]
+                    # Steering
+                    tickOutput["Throttle"] = values[29]
+                    tickOutput["Steer"] = values[30]
+                    tickOutput["Brake"] = values[31]
+                    tickOutput["Clutch"] = values[32]
+                    tickOutput["Gear"] = values[33]
 
-        # G Force
-        tickOutput["G-Force Lateral"] = values[34]
-        tickOutput["G-Force Longitudinal"] = values[35]
-        tickOutput["RPM"] = values[37] * 10
+                    # G Force
+                    tickOutput["G-Force Lateral"] = values[34]
+                    tickOutput["G-Force Longitudinal"] = values[35]
+                    tickOutput["RPM"] = values[37] * 10
 
-        print(tickOutput)
+                    fout.write(str(json.dumps(tickOutput)))
+                    fout.write(",")
+            except KeyboardInterrupt:
+                    f = open(output_path, "rb+")
+                    f.seek(-1,2)
+                    f.truncate()
+                    f.close
+
+                    fout.write("]")
+                    fout.close    
+    except FileExistsError as e:
+        print(e)
 
 
 def spark():
